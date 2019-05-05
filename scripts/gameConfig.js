@@ -2,6 +2,7 @@
 import Boot from './scenes/boot.js'
 import PreloadScene from './scenes/preloadScene.js'
 import MainScene from './scenes/mainScene.js'
+import Menu from './scenes/menu.js'
 
 export const config = {
   // Phaser GameConfig object
@@ -14,7 +15,7 @@ export const config = {
     width: 750,
     height: 1334
   },
-  scene: [Boot, PreloadScene, MainScene],
+  scene: [Boot, Menu ,PreloadScene, MainScene],
   physics: {
     default: 'arcade',
     arcade: {
@@ -62,7 +63,13 @@ export const gameOptions = {
   },
 
   // Tile Colors
-  colors: [0x718093, 0x00a8ff, 0x9c88ff, 0xfbc531, 0xe84118],
+  /**
+   * Expand this into an object so different pallets can be selected
+   */
+  colors: [0x718093, 0x00a8ff, 0x9c88ff, 0xfbc531, 0xe84118],  // Original
+  // colors: [0x718093, 0x88e0ce, 0x63C0AE, 0x3DA18F, 0x18816F],  // Mint
+  // colors: [0x718093, 0xf9b1b1, 0xE58787, 0xD15C5C, 0xBD3232],  // Salmon
+  // colors: [0x718093, 0x749cf2, 0x5B6BD8, 0x413ABF, 0x2809A5], // Blurple
 
   // The directions to check for openings in. Use only the first four to make things harder
   directions: [

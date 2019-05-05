@@ -6,11 +6,18 @@ export default class MainScene extends Phaser.Scene {
   }
 
   init(data) {
-    // If the game is in random mode
-    this.randomMode = data.random === true
+    // Determine if the game is in randomMode
+    this.randomMode = data.randomMode == true
 
     // If no level number was passed set it to
     this.level =  (!isNaN(data.level)) ? data.level : 0
+
+    // Handle running over the level count
+    if (this.level >= 10) {
+      this.level = 0
+    }
+
+    console.log("Main Scene Init")
   }
 
   create() {
@@ -18,6 +25,9 @@ export default class MainScene extends Phaser.Scene {
     this.gameWidth = this.cameras.main.width;
     this.gameHeight = this.cameras.main.height;
 
+    if(this.randomMode) {
+      this.makeRandom();
+    }
     this.makeRandom();
     this.createLevel();
 
@@ -30,22 +40,21 @@ export default class MainScene extends Phaser.Scene {
   createLevel() {
 
     // The array of our tiles. We can modify this array as the game progresses
-    // without modifying our initial settings
+    // without modifying our initial settings, allowing for board restarts
     this.tilesArray = [];
 
     // The container to contain all of our tiles
     this.tileGroup = this.add.container();
 
-    // Centering the group on the screen. Use a container as it has positional members
+    // Placing the game field on the screen. Use a container as it has positional members
     this.tileGroup.x = (this.gameWidth - gameOptions.tileSize * gameOptions.fieldSize.cols) * 0.5;
-    this.tileGroup.y = (this.gameHeight - gameOptions.tileSize * gameOptions.fieldSize.rows) * 0.5;
+    this.tileGroup.y = (this.gameHeight - gameOptions.tileSize * gameOptions.fieldSize.rows) * 0.3;
 
     // Determine if the game is an random mode and what level to hand the user
     if(this.randomMode) {
         this.grid = gameOptions.randomLevels[this.level]
       } else {
-        this.grid = gameOptions.randomLevels[this.level]
-      // this.grid = gameOptions.levels[this.level]
+        this.grid = gameOptions.levels[this.level]
     }
 
     // Nested loops to make a grid of gameOptions.filedSize.rows * gameOptions.fieldSize.cols
@@ -59,20 +68,25 @@ export default class MainScene extends Phaser.Scene {
     }
 
     // Our restart button
-    var restartButton = this.add.sprite(this.gameWidth * 0.5, this.gameHeight - this.tileGroup.y + gameOptions.tileSize * 0.5, 'restart')
+    var restartButton = this.add.sprite(this.gameWidth * 0.5, 
+      this.tileGroup.y + gameOptions.tileSize * gameOptions.fieldSize.rows + gameOptions.tileSize* 0.5, 
+      'restart')
       .setOrigin(0.5, 0)
       .setInteractive()
       .on('pointerdown', () => {
         this.scene.start('MainScene', {level: this.level,
-          random: this.randomMode})
+          randomMode: this.randomMode})
       })
-
-    var randomButton = this.add.sprite(this.gameWidth * 0.5, this.gameHeight - this.tileGroup.y + gameOptions.tileSize * 2, 'restart')
+    // Our Home button
+    var homeButton = this.add.sprite(this.gameWidth * 0.5, 
+      this.tileGroup.y + gameOptions.tileSize * gameOptions.fieldSize.rows + gameOptions.tileSize * 1.5, 
+      'restart')
       .setOrigin(0.5, 0)
       .setInteractive()
       .on('pointerdown', () => {
-        this.scene.start('MainScene', {random: true, level : this.level})
+        this.scene.start('Menu')
       })
+
 
   }
 
@@ -269,7 +283,7 @@ export default class MainScene extends Phaser.Scene {
     // We've checked every tile so we have a solution
     // Start the game state, passing the next level
 
-    this.time.delayedCall(1000, this.scene.start('MainScene', {level: this.level + 1}), [], this)
+    this.time.delayedCall(1000, this.scene.start('MainScene', {level: this.level + 1, randomMode: this.randomMode}), [], this)
   }
 
   /**
@@ -282,7 +296,6 @@ export default class MainScene extends Phaser.Scene {
     if (maxAttempts < 2){
       maxAttempts = 2
     }
-    // console.log("FOUND SOLUTION")
 
     // This is where we will store our newly generated level
     var newLevel = []
@@ -375,7 +388,8 @@ export default class MainScene extends Phaser.Scene {
     // Make a bunch of random levels
     for (let i = 0; i < 10; i ++) {
       // Ramp up the difficulty
-      gameOptions.randomLevels[i] = this.generateRandomLevel(i * 2 + 2)
+      let difficulty = i * i + 2
+      gameOptions.randomLevels[i] = this.generateRandomLevel(difficulty)
     }
   }
 }

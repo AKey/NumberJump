@@ -17,10 +17,10 @@ export default class PreloadScene extends Phaser.Scene {
      * Lock the RNG seed to today's formated date so it's
      * the same for everyone on any day
      */
-    Phaser.Math.RND.sow( new Date().toISOString().slice(0, 10) )
+    // Phaser.Math.RND.sow( new Date().toISOString().slice(0, 10) )
   }
 
   create() {
-    this.scene.start('MainScene')
+    this.scene.start('Menu')
   }
 }
