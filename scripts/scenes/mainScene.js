@@ -6,18 +6,17 @@ export default class MainScene extends Phaser.Scene {
   }
 
   init(data) {
-    // Determine if the game is in randomMode
-    this.randomMode = data.randomMode == true
+    // Assign our game mode
+    this.mode = data.mode || "standard"
 
     // If no level number was passed set it to
     this.level =  (!isNaN(data.level)) ? data.level : 0
 
     // Handle running over the level count
-    if (this.level >= 10) {
+    // TODO: Handle a dynamic level count
+    if (this.level >= 10 || this.level < 0) {
       this.level = 0
     }
-
-    console.log("Main Scene Init")
   }
 
   create() {
@@ -25,11 +24,12 @@ export default class MainScene extends Phaser.Scene {
     this.gameWidth = this.cameras.main.width;
     this.gameHeight = this.cameras.main.height;
 
-    if(this.randomMode) {
+    if(this.mode == 'daily') {
       this.makeRandom();
     }
-    this.makeRandom();
+
     this.createLevel();
+    this.makeHUD();
 
     // Handle user input
     this.input.on('pointerdown', (pointer) => this.pickTile(pointer), this)
@@ -51,7 +51,7 @@ export default class MainScene extends Phaser.Scene {
     this.tileGroup.y = (this.gameHeight - gameOptions.tileSize * gameOptions.fieldSize.rows) * 0.3;
 
     // Determine if the game is an random mode and what level to hand the user
-    if(this.randomMode) {
+    if(this.mode !== 'standard') {
         this.grid = gameOptions.randomLevels[this.level]
       } else {
         this.grid = gameOptions.levels[this.level]
@@ -66,28 +66,6 @@ export default class MainScene extends Phaser.Scene {
         this.addTile(i, j);
       }
     }
-
-    // Our restart button
-    var restartButton = this.add.sprite(this.gameWidth * 0.5, 
-      this.tileGroup.y + gameOptions.tileSize * gameOptions.fieldSize.rows + gameOptions.tileSize* 0.5, 
-      'restart')
-      .setOrigin(0.5, 0)
-      .setInteractive()
-      .on('pointerdown', () => {
-        this.scene.start('MainScene', {level: this.level,
-          randomMode: this.randomMode})
-      })
-    // Our Home button
-    var homeButton = this.add.sprite(this.gameWidth * 0.5, 
-      this.tileGroup.y + gameOptions.tileSize * gameOptions.fieldSize.rows + gameOptions.tileSize * 1.5, 
-      'restart')
-      .setOrigin(0.5, 0)
-      .setInteractive()
-      .on('pointerdown', () => {
-        this.scene.start('Menu')
-      })
-
-
   }
 
   /**
@@ -107,12 +85,6 @@ export default class MainScene extends Phaser.Scene {
     theTile.width = gameOptions.tileSize;
     theTile.height = gameOptions.tileSize;
     
-    // Assign the tile a value and color based on it's value
-    // if (this.randomMode) {
-    //   var tileValue = this.newLevel[row][col]
-    // } else {
-    //   var tileValue = this.levels[this.level][row][col];
-    // }
     var tileValue = this.grid[row][col]
     
     // tint the tile
@@ -257,6 +229,7 @@ export default class MainScene extends Phaser.Scene {
   // Check if a point is in the possibleLanding array
   pointInArray(p) {
     for (let i = 0; i < this.possibleLanding.length; i++) {
+
       // Did we find the point at i-th element?
       if (this.possibleLanding[i].x == p.x && this.possibleLanding[i].y == p.y){
         return true;
@@ -280,17 +253,17 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     }
+
     // We've checked every tile so we have a solution
     // Start the game state, passing the next level
-
-    this.time.delayedCall(1000, this.scene.start('MainScene', {level: this.level + 1, randomMode: this.randomMode}), [], this)
+    this.time.delayedCall(1000, this.nextLevel, [], this)
   }
 
   /**
    * Generates a random playable level
    * @param {INT} maxAttempts Max attempts to solve before moving on. Larger value for harder possible levels
    */
-  generateRandomLevel(maxAttempts) {
+  generateRandomLevel(maxAttempts, RDG) {
 
     // Prevent empty boards
     if (maxAttempts < 2){
@@ -309,8 +282,8 @@ export default class MainScene extends Phaser.Scene {
     }
 
     // Pick a random start position
-    var startPosition = new Phaser.Geom.Point(Phaser.Math.RND.between(0, gameOptions.fieldSize.rows - 1),
-    Phaser.Math.RND.between(0, gameOptions.fieldSize.cols - 1))
+    var startPosition = new Phaser.Geom.Point(RDG.between(0, gameOptions.fieldSize.rows - 1),
+    RDG.between(0, gameOptions.fieldSize.cols - 1))
 
     // We'll store the solution here later
     var solution = '';
@@ -325,10 +298,10 @@ export default class MainScene extends Phaser.Scene {
       do {
 
         // Set the tile to a random value between 1 - 4
-        var randomTileValue = Phaser.Math.RND.between(1, 4);
+        var randomTileValue = RDG.between(1, 4);
 
         // Choose a random direction
-        var randomDirection = Phaser.Math.RND.between(0, gameOptions.directions.length - 1);
+        var randomDirection = RDG.between(0, gameOptions.directions.length - 1);
 
         // Given the start position and tile value we can determine the destination
         var randomDestination = new Phaser.Geom.Point(startPosition.x + randomTileValue * gameOptions.directions[randomDirection].x,
@@ -338,7 +311,7 @@ export default class MainScene extends Phaser.Scene {
         attempts ++;
 
       // Break out when we've found a legal destination OR we've run out of attempts
-      } while(!this.isLegalDestination(randomDestination, newLevel) && attempts < maxAttempts)
+      } while ( !this.isLegalDestination(randomDestination, newLevel) && attempts < maxAttempts )
 
       // We're out of the do loop, did we find a legal destination before running out of attempts?
       if (attempts < maxAttempts) {
@@ -384,12 +357,80 @@ export default class MainScene extends Phaser.Scene {
     // Make sure we only make random levels once per game
     // This also keeps the "Restart" button working
     if(typeof gameOptions.randomLevels[1] !== 'undefined') return
+
+    // Initilize the seed based on game mode.
+    // TODO: This is shortcutted to a value for now. CHANGE THIS 
+    let seed = new Date().toISOString().slice(0, 10)
+    var RDG = new Phaser.Math.RandomDataGenerator(seed)
+    console.log(seed)
     
     // Make a bunch of random levels
     for (let i = 0; i < 10; i ++) {
       // Ramp up the difficulty
       let difficulty = i * i + 2
-      gameOptions.randomLevels[i] = this.generateRandomLevel(difficulty)
+      gameOptions.randomLevels[i] = this.generateRandomLevel(difficulty, RDG)
     }
   }
+
+  nextLevel() {
+    this.scene.start('MainScene', {level: this.level + 1, mode: this.mode})
+  }
+
+  makeHUD() {
+    //// UI stuff
+
+    // Our restart button
+    this.add.sprite(this.gameWidth * 0.5, 
+      this.tileGroup.y + gameOptions.tileSize * gameOptions.fieldSize.rows + gameOptions.tileSize* 0.3, 
+      'return')
+      .setOrigin(0.5, 0)
+      .setScale(2)
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.scene.start('MainScene', {level: this.level,
+          mode: this.mode})
+      })
+
+    // Previous Puzzle Button
+    this.add.sprite(this.gameWidth * 0.5 - gameOptions.tileSize * 2, 
+      this.tileGroup.y + gameOptions.tileSize * gameOptions.fieldSize.rows + gameOptions.tileSize* 0.3, 
+      'backward')
+      .setOrigin(0.5, 0)
+      .setScale(2)
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.scene.start('MainScene', {level: this.level - 1,
+          mode: this.mode})
+      })
+
+    // Next Puzzle
+    this.add.sprite(this.gameWidth * 0.5 + gameOptions.tileSize * 2, 
+      this.tileGroup.y + gameOptions.tileSize * gameOptions.fieldSize.rows + gameOptions.tileSize* 0.3, 
+      'forward')
+      .setOrigin(0.5, 0)
+      .setScale(2)
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.scene.start('MainScene', {level: this.level + 1,
+          mode: this.mode})
+      })
+
+    // Our Home button
+    var homeButton = this.add.sprite(this.gameWidth * 0.5, 
+      this.tileGroup.y + gameOptions.tileSize * gameOptions.fieldSize.rows + gameOptions.tileSize * 2, 
+      'home')
+      .setOrigin(0.5, 0)
+      .setScale(2)
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.scene.start('Menu')
+      })
+
+    // Level indicator
+    this.add.text(this.tileGroup.x, this.tileGroup.y - gameOptions.tileSize * .5, `LEVEL: ${this.level}`, {
+      fontSize: '45px',
+      fontStyle: 'bold'
+    })
+  }
+
 }
