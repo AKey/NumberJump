@@ -13,7 +13,7 @@ export default class Boot extends Phaser.Scene {
 
     // Game Title
     this.add.bitmapText(this.cameras.main.width * 0.5, this.cameras.main.height * 0.2, 'chunq', 'Number \n     Jumper')
-    .setFontSize(100)
+    .setFontSize(120)
     .setOrigin(0.5)
 
     // First game option

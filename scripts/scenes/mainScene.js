@@ -38,7 +38,8 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    this.timeText.text = 'TIME: ' + Math.floor(this.timer.getElapsedSeconds())
+    this.seconds = Math.floor(this.timer.getElapsedSeconds())
+    this.timeText.text = 'TIME: ' + this.seconds
   }
 
   createLevel() {
@@ -70,6 +71,11 @@ export default class MainScene extends Phaser.Scene {
         this.addTile(i, j);
       }
     }
+
+    // Empty possibleLanding array. This is here to avoid an error caused by
+    // an empty tile being the first one a player picks
+    this.possibleLanding = []
+    this.possibleLanding.length = 0
   }
 
   /**
@@ -139,6 +145,7 @@ export default class MainScene extends Phaser.Scene {
       // It's numeric value
       var pickedValue = pickedTile.value;
 
+
       // If it's a valid, non-zero, tile...
       if (pickedValue > 0) {
 
@@ -171,7 +178,7 @@ export default class MainScene extends Phaser.Scene {
         }
       }
 
-      // This is a tile inside the filed but is maybe empty
+      // This is a tile inside the field but is maybe empty
       else {
 
         // Check if the picked tile is in the array of possible landings
@@ -232,6 +239,7 @@ export default class MainScene extends Phaser.Scene {
 
   // Check if a point is in the possibleLanding array
   pointInArray(p) {
+    
     for (let i = 0; i < this.possibleLanding.length; i++) {
 
       // Did we find the point at i-th element?
@@ -261,7 +269,7 @@ export default class MainScene extends Phaser.Scene {
     // We've checked every tile so we have a solution
     // Start the game state, passing the next level
     this.timer.paused = true
-    this.time.delayedCall(1000, this.nextLevel, [], this)
+    this.time.delayedCall(500, this.nextLevel, [], this)
   }
 
   /**
@@ -377,7 +385,8 @@ export default class MainScene extends Phaser.Scene {
   }
 
   nextLevel() {
-    this.scene.start('MainScene', {level: this.level + 1, mode: this.mode})
+    // this.scene.run('levelComplete', {level: this.level, time: this.seconds, mode: this.mode})
+    this.scene.start('levelComplete', {level: this.level, time: this.seconds, mode: this.mode})
   }
 
   makeHUD() {
@@ -391,7 +400,7 @@ export default class MainScene extends Phaser.Scene {
       .setScale(2)
       .setInteractive()
       .on('pointerdown', () => {
-        this.scene.start('MainScene', {level: this.level,
+        this.scene.restart({level: this.level,
           mode: this.mode})
       })
 
@@ -403,7 +412,7 @@ export default class MainScene extends Phaser.Scene {
       .setScale(2)
       .setInteractive()
       .on('pointerdown', () => {
-        this.scene.start('MainScene', {level: this.level - 1,
+        this.scene.restart({level: this.level - 1,
           mode: this.mode})
       })
 
@@ -415,7 +424,7 @@ export default class MainScene extends Phaser.Scene {
       .setScale(2)
       .setInteractive()
       .on('pointerdown', () => {
-        this.scene.start('MainScene', {level: this.level + 1,
+        this.scene.restart({level: this.level + 1,
           mode: this.mode})
       })
 
@@ -427,13 +436,13 @@ export default class MainScene extends Phaser.Scene {
       .setScale(2)
       .setInteractive()
       .on('pointerdown', () => {
-        this.scene.start('Menu')
+        this.scene.start('Menu');
       })
 
     this.timeText = this.add.bitmapText(this.tileGroup.x, this.tileGroup.y - gameOptions.tileSize * 2, 'chunq', `TIME: `)
     
     // Level indicator
-    this.add.bitmapText(this.tileGroup.x, this.tileGroup.y - gameOptions.tileSize, 'chunq', `LEVEL: ${this.level}`)
+    this.add.bitmapText(this.tileGroup.x, this.tileGroup.y - gameOptions.tileSize, 'chunq', `LEVEL: ${this.level + 1}`)
 
   }
 

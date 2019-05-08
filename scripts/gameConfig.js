@@ -3,6 +3,7 @@ import Boot from "./scenes/boot.js";
 import PreloadScene from "./scenes/preloadScene.js";
 import MainScene from "./scenes/mainScene.js";
 import Menu from "./scenes/menu.js";
+import levelComplete from "./scenes/levelComplete.js";
 
 export const config = {
   // Phaser GameConfig object
@@ -15,7 +16,7 @@ export const config = {
     width: 750,
     height: 1334
   },
-  scene: [Boot, Menu, PreloadScene, MainScene],
+  scene: [Boot, Menu, PreloadScene, MainScene, levelComplete],
   physics: {
     default: "arcade",
     arcade: {
