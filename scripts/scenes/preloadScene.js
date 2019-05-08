@@ -11,6 +11,10 @@ export default class PreloadScene extends Phaser.Scene {
     // use Geom to make a square
     
     this.loadImages()
+
+    // Get our font on
+    this.load.setPath('../assets/font');
+    this.load.bitmapFont('chunq', 'Chunq.png', 'Chunq.fnt');
   }
 
   loadImages() {
