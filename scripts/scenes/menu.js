@@ -10,44 +10,40 @@ export default class Boot extends Phaser.Scene {
   }
   
   create() {
-    var title = this.add.text(this.cameras.main.width * 0.5, 100, 'Number Jumper', {
-      fontSize: '80px',
-      fill: '#DDD'
-    })
+
+    // Game Title
+    this.add.bitmapText(this.cameras.main.width * 0.5, this.cameras.main.height * 0.2, 'chunq', 'Number \n     Jumper')
+    .setFontSize(100)
     .setOrigin(0.5)
 
-    var btnStandard = this.add.text(20, 400, 'Original Levels', {
-      fontSize: '60px',
-      fill: '#0f0'
-    })
+    // First game option
+    let btnOriginal = this.add.bitmapText(this.cameras.main.width * 0.05, this.cameras.main.height * 0.4, 'chunq', 'Original Levels')
+    .setTint(0x6c5ce7)
+    .setFontSize(64)
     .setInteractive()
     .on('pointerdown', () => { 
       this.scene.start("MainScene", {mode: 'standard'}); 
     })
-    
-    var btnDaily = this.add.text(20, 550, 'Daily Levels', {
-      fontSize: '64px',
-      fill: '#0f0'})
+
+    // Sub text
+    this.add.bitmapText(btnOriginal.x * 5, btnOriginal.y + btnOriginal.fontSize, 'chunq', 'The Original 10 levels')
+    // .setTint(0x6c5ce7)
+    .setFontSize(32)
+
+
+    // Second Game Option
+    let btnDaily = this.add.bitmapText(this.cameras.main.width * 0.05, this.cameras.main.height * 0.55, 'chunq', 'Daily Levels')
+    .setTint(0xbadc58)
+    .setFontSize(64)
     .setInteractive()
     .on('pointerdown', () => { 
       gameOptions.randomLevels = []
       this.scene.start("MainScene", {mode: 'daily'}); 
     })
 
-    /**
-     * This is for later versions
-     */
-    // var btnBonus = this.add.text(20, 700, 'Bonus Levels', {
-    //   fontSize: '64px',
-    //   fill: '#0f0'})
-    // .setInteractive()
-    // .on('pointerdown', () => { 
-    //   // Set the RNG and clear pre-calculated random levels before starting the game
-    //   Phaser.Math.RND.sow( new Date().toUTCString().slice(0, 15) )
-    //   gameOptions.randomLevels = []
-    //   this.scene.start("MainScene", {randomMode: true}); 
-    // })
-    
-    // this.scene.start("MainScene", {randomMode: false, level: 10})
+     // Sub text
+     this.add.bitmapText(btnDaily.x * 5, btnDaily.y + btnDaily.fontSize, 'chunq', '10 Fresh Daily Levels')
+     // .setTint(0x6c5ce7)
+     .setFontSize(32)
   }
 }

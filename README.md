@@ -15,8 +15,8 @@ https://www.emanueleferonato.com/tag/znumbers/
   + **[In Progress]** Instanciate a new Random Data Generator, generating a Key for play mode and daily  
 
 
-+ Game HUD
-  - Include Level, Attempts, Running Time
++ **[DONE]**Game HUD
+  - ~~Include Level, Running Time~~
   - ~~Back, Restart, Forward, Home Buttons~~
 
 + [IN PROGRESS] [SOLVED?] Handle beating the game: Finishing the last level
@@ -26,5 +26,5 @@ https://www.emanueleferonato.com/tag/znumbers/
 - Unlock extra color themes as a reward  
 
 + Congratulations/Win screen  
-  - Display level, attempts, time
+  - Display level, Time
   - Replay button, Next/Last level options, Home button

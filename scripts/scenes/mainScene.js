@@ -31,11 +31,15 @@ export default class MainScene extends Phaser.Scene {
     this.createLevel();
     this.makeHUD();
 
+    this.timer = this.time.addEvent({delay: 6000000})
+
     // Handle user input
     this.input.on('pointerdown', (pointer) => this.pickTile(pointer), this)
   }
 
-  update() {}
+  update() {
+    this.timeText.text = 'TIME: ' + Math.floor(this.timer.getElapsedSeconds())
+  }
 
   createLevel() {
 
@@ -256,6 +260,7 @@ export default class MainScene extends Phaser.Scene {
 
     // We've checked every tile so we have a solution
     // Start the game state, passing the next level
+    this.timer.paused = true
     this.time.delayedCall(1000, this.nextLevel, [], this)
   }
 
@@ -362,12 +367,11 @@ export default class MainScene extends Phaser.Scene {
     // TODO: This is shortcutted to a value for now. CHANGE THIS 
     let seed = new Date().toISOString().slice(0, 10)
     var RDG = new Phaser.Math.RandomDataGenerator(seed)
-    console.log(seed)
     
     // Make a bunch of random levels
     for (let i = 0; i < 10; i ++) {
       // Ramp up the difficulty
-      let difficulty = i * i + 2
+      let difficulty = i + 2
       gameOptions.randomLevels[i] = this.generateRandomLevel(difficulty, RDG)
     }
   }
@@ -416,7 +420,7 @@ export default class MainScene extends Phaser.Scene {
       })
 
     // Our Home button
-    var homeButton = this.add.sprite(this.gameWidth * 0.5, 
+    this.add.sprite(this.gameWidth * 0.5, 
       this.tileGroup.y + gameOptions.tileSize * gameOptions.fieldSize.rows + gameOptions.tileSize * 2, 
       'home')
       .setOrigin(0.5, 0)
@@ -426,11 +430,11 @@ export default class MainScene extends Phaser.Scene {
         this.scene.start('Menu')
       })
 
+    this.timeText = this.add.bitmapText(this.tileGroup.x, this.tileGroup.y - gameOptions.tileSize * 2, 'chunq', `TIME: `)
+    
     // Level indicator
-    this.add.text(this.tileGroup.x, this.tileGroup.y - gameOptions.tileSize * .5, `LEVEL: ${this.level}`, {
-      fontSize: '45px',
-      fontStyle: 'bold'
-    })
+    this.add.bitmapText(this.tileGroup.x, this.tileGroup.y - gameOptions.tileSize, 'chunq', `LEVEL: ${this.level}`)
+
   }
 
 }
