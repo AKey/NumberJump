@@ -39,7 +39,7 @@ export default class MainScene extends Phaser.Scene {
 
   update() {
     this.seconds = Math.floor(this.timer.getElapsedSeconds())
-    this.timeText.text = 'TIME: ' + this.seconds
+    this.timeText.text = 'TIME: ' + this.secondsToTime(this.seconds)
   }
 
   createLevel() {
@@ -448,4 +448,10 @@ export default class MainScene extends Phaser.Scene {
 
   }
 
+  secondsToTime(time){
+    // Lots of goodness here to make our timer pretty
+    let minutes = Math.floor(time / 60);
+    let seconds = time - minutes * 60
+    return ('00' + minutes).slice(-2) + ':' + ('00' + seconds).slice(-2)
+  }
 }
