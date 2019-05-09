@@ -70,6 +70,9 @@ export const SOURCES = {
 };
 
 export const gameOptions = {
+  // For saving/loading highscores
+  localStorageName : 'NumberJumper',
+
   // Tile size in pixels
   tileSize: 100,
 

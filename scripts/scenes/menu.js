@@ -45,5 +45,25 @@ export default class Boot extends Phaser.Scene {
      this.add.bitmapText(btnDaily.x * 5, btnDaily.y + btnDaily.fontSize, 'chunq', '10 Fresh Daily Levels')
      // .setTint(0x6c5ce7)
      .setFontSize(32)
+
+     this.getScores()
+  }
+
+  // Used to load our highscores, make a new entry, and reset old scores
+  getScores() {
+    var today = new Date().toISOString().slice(0, 10);
+    var savedData = localStorage.getItem(gameOptions.localStorageName) == null ? {
+      date: today,
+      standard: [],
+      daily: []
+    } : JSON.parse(localStorage.getItem(gameOptions.localStorageName));
+
+    // Scores are from a different date. Wipe them
+    if (savedData.date !== today) {
+      savedData.date = today;
+      savedData.daily = [];
+    }
+
+    localStorage.setItem(gameOptions.localStorageName, JSON.stringify(savedData));
   }
 }

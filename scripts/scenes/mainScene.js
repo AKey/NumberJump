@@ -374,7 +374,7 @@ export default class MainScene extends Phaser.Scene {
     // Initilize the seed based on game mode.
     // TODO: This is shortcutted to a value for now. CHANGE THIS 
     let seed = new Date().toISOString().slice(0, 10)
-    var RDG = new Phaser.Math.RandomDataGenerator(seed)
+    var RDG = new Phaser.Math.RandomDataGenerator([seed])
     
     // Make a bunch of random levels
     for (let i = 0; i < 10; i ++) {
