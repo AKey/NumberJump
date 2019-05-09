@@ -51,6 +51,19 @@ export default class Boot extends Phaser.Scene {
     .setLetterSpacing(1)
 
      this.getScores()
+
+
+     // Options Button
+    this.add.bitmapText(this.cameras.main.width * 0.05, this.cameras.main.height * 0.75, 'chunq', 'Game Options')
+    .setTint(0x22a6b3)
+    .setFontSize(64)
+    .setLetterSpacing(1)
+    .setInteractive()
+    .on('pointerdown', () => { 
+      gameOptions.randomLevels = []
+      this.scene.start('optionsMenu');
+    })
+    
   }
 
   // Used to load our highscores, make a new entry, and reset old scores
