@@ -24,7 +24,7 @@ export default class MainScene extends Phaser.Scene {
     this.gameWidth = this.cameras.main.width;
     this.gameHeight = this.cameras.main.height;
 
-    if(this.mode == 'daily') {
+    if(this.mode !== 'standard') {
       this.makeRandom();
     }
 
