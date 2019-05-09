@@ -439,10 +439,12 @@ export default class MainScene extends Phaser.Scene {
         this.scene.start('Menu');
       })
 
-    this.timeText = this.add.bitmapText(this.tileGroup.x, this.tileGroup.y - gameOptions.tileSize * 2, 'chunq', `TIME: `)
+    this.timeText = this.add.bitmapText(this.tileGroup.x, this.tileGroup.y - gameOptions.tileSize * 1.5, 'chunq', `TIME: `)
+    .setLetterSpacing(1)
     
     // Level indicator
     this.add.bitmapText(this.tileGroup.x, this.tileGroup.y - gameOptions.tileSize, 'chunq', `LEVEL: ${this.level + 1}`)
+    .setLetterSpacing(1)
 
   }
 

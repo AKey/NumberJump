@@ -9,6 +9,8 @@ export default class MainScene extends Phaser.Scene {
     this.level = data.level;
     this.time = data.time;
     this.mode = data.mode;
+    
+    this.newHigh = false;
   }
 
   create() {
@@ -59,6 +61,7 @@ export default class MainScene extends Phaser.Scene {
     this.levelText = this.add.bitmapText(this.cameras.main.width * 0.5, this.cameras.main.height * .25, 'chunq', 'Level - ' + (this.level + 1))
     .setFontSize(64)
     .setOrigin(0.5,0)
+    .setLetterSpacing(1)
     .setTint(0x718093)
 
     let finalTime = this.secondsToTime(this.time)
@@ -67,22 +70,25 @@ export default class MainScene extends Phaser.Scene {
     var timeText = this.add.bitmapText(this.levelText.x , this.levelText.y + this.levelText.height * 2, 'chunq', 'Time - ' + finalTime)
     .setFontSize(64)
     .setOrigin(0.5,0)
+    .setLetterSpacing(1)
     .setTint(0x718093)
 
-    if (this.newHigh) {
+    if (this.newHigh == true) {
       timeText.setTint(0xeb2f06)
       .setFontSize(70)
+      .setLetterSpacing(1)
 
       // Make some text to tell the player they set a new best
       var newRecordText = this.add.bitmapText(timeText.x, timeText.y, 'chunq', 'NEW RECORD!')
       .setOrigin(0.5, 1)
       .setFontSize(50)
+      .setLetterSpacing(1)
       .setTint(0xEE5A24)
 
       // Make the new best indicator blink
       this.tweens.add({
         targets: newRecordText,
-        alpha: 0.5,
+        alpha: 0.1,
         duration: 1000,
         repeat: -1,
         yoyo: true
@@ -93,6 +99,7 @@ export default class MainScene extends Phaser.Scene {
       var newRecordText = this.add.bitmapText(timeText.x, timeText.y + timeText.height, 'chunq', 'Best:  ' + bestTime)
       .setOrigin(0.5, 0)
       .setFontSize(50)
+      .setLetterSpacing(1)
       .setTint(0xB53471)
       
     }

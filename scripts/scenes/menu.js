@@ -20,6 +20,7 @@ export default class Boot extends Phaser.Scene {
     let btnOriginal = this.add.bitmapText(this.cameras.main.width * 0.05, this.cameras.main.height * 0.4, 'chunq', 'Original Levels')
     .setTint(0x6c5ce7)
     .setFontSize(64)
+    .setLetterSpacing(1)
     .setInteractive()
     .on('pointerdown', () => { 
       this.scene.start("MainScene", {mode: 'standard'}); 
@@ -29,22 +30,25 @@ export default class Boot extends Phaser.Scene {
     this.add.bitmapText(btnOriginal.x * 5, btnOriginal.y + btnOriginal.fontSize, 'chunq', 'The Original 10 levels')
     // .setTint(0x6c5ce7)
     .setFontSize(32)
+    .setLetterSpacing(1)
 
 
     // Second Game Option
     let btnDaily = this.add.bitmapText(this.cameras.main.width * 0.05, this.cameras.main.height * 0.55, 'chunq', 'Daily Levels')
     .setTint(0xbadc58)
     .setFontSize(64)
+    .setLetterSpacing(1)
     .setInteractive()
     .on('pointerdown', () => { 
       gameOptions.randomLevels = []
       this.scene.start("MainScene", {mode: 'daily'}); 
     })
-
-     // Sub text
-     this.add.bitmapText(btnDaily.x * 5, btnDaily.y + btnDaily.fontSize, 'chunq', '10 Fresh Daily Levels')
-     // .setTint(0x6c5ce7)
-     .setFontSize(32)
+    
+    // Sub text
+    this.add.bitmapText(btnDaily.x * 5, btnDaily.y + btnDaily.fontSize, 'chunq', '10 Fresh Daily Levels')
+    // .setTint(0x6c5ce7)
+    .setFontSize(32)
+    .setLetterSpacing(1)
 
      this.getScores()
   }
