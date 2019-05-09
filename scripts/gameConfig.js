@@ -4,6 +4,7 @@ import PreloadScene from "./scenes/preloadScene.js";
 import MainScene from "./scenes/mainScene.js";
 import Menu from "./scenes/menu.js";
 import levelComplete from "./scenes/levelComplete.js";
+import optionsMenu from "./scenes/optionsMenu.js";
 
 export const config = {
   // Phaser GameConfig object
@@ -16,7 +17,7 @@ export const config = {
     width: 750,
     height: 1334
   },
-  scene: [Boot, Menu, PreloadScene, MainScene, levelComplete],
+  scene: [Boot, Menu, PreloadScene, MainScene, levelComplete, optionsMenu],
   physics: {
     default: "arcade",
     arcade: {
@@ -58,7 +59,6 @@ export const SOURCES = {
     "locked",
     "musicOff",
     "musicOn",
-    "restart",
     "return",
     "tile",
     "trophy",
