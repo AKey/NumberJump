@@ -11,10 +11,6 @@ https://www.emanueleferonato.com/tag/znumbers/
 
 + Music/Sounds ??  
 
-+ Make the Level Complete! screen nicer.
-    - Replace text buttons
-    - Add Best time indiactor and set to visible if the time is better than saved
-
 ## Upgrades for later
 - Unlock extra color themes as a reward  
 - Bonus Levels, change seed based on game mode  

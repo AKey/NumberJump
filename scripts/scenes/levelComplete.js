@@ -21,16 +21,16 @@ export default class MainScene extends Phaser.Scene {
 
   makeBackground() {
     // Build our backgound, box, and title text
-    // Dull out the background
+    // Setting a background color
     this.add.graphics()
     .fillStyle(0x00b894, 0.9)
-    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height)
+    .fillRoundedRect(0, 0, this.cameras.main.width, this.cameras.main.height)
 
     // The box to hold our text items
     var box = this.add.graphics()
     .fillStyle(0xffffff, 1)
-    .fillRoundedRect(0, 0, this.cameras.main.width * .8, this.cameras.main.height * .8)
-    .setPosition(this.cameras.main.width * .1, this.cameras.main.height * .1)
+    .fillRoundedRect(0, 0, this.cameras.main.width * .8, this.cameras.main.height * .5)
+    .setPosition(this.cameras.main.width * .1, this.cameras.main.height * .15)
 
     // Congrats Text, tile bar
     this.add.bitmapText(this.cameras.main.width * 0.5, box.y, 'chunq', 'Level Complete!')
@@ -99,36 +99,32 @@ export default class MainScene extends Phaser.Scene {
   }
 
   makeButtons() {
-    
-    // Next Level
-    this.add.bitmapText(this.levelText.x , this.levelText.y + this.levelText.height * 5, 'chunq', 'Next Level')
-    .setFontSize(64)
-    .setOrigin(0.5,0)
-    .setTint(0x0097e6)
+  // Next Puzzle
+  var nextSprite = this.add.sprite(this.cameras.main.width * 0.5 , this.cameras.main.height * .7, 'forward')
+    .setOrigin(0.5, 0)
+    .setScale(2)
     .setInteractive()
     .on('pointerdown', () => {
       this.scene.start('MainScene', {level: this.level + 1, mode: this.mode})
     })
 
-    // Retry
-    this.add.bitmapText(this.levelText.x , this.levelText.y + this.levelText.height * 12, 'chunq', 'Retry')
-    .setFontSize(64)
-    .setOrigin(0.5,0)
-    .setTint(0xf0932b)
-    .setInteractive()
-    .on('pointerdown', () => {
-      this.scene.start('MainScene', {level: this.level, mode: this.mode})
-    })
-
-    // Home
-    this.add.bitmapText(this.levelText.x , this.levelText.y + this.levelText.height * 8, 'chunq', 'Home')
-    .setFontSize(64)
-    .setOrigin(0.5,0)
-    .setTint(0x8c7ae6)
-    .setInteractive()
-    .on('pointerdown', () => {
-      this.scene.start('Menu')
-    })
+    // Our restart button
+    this.add.sprite(nextSprite.x - nextSprite.width * 3, nextSprite.y, 'return')
+      .setOrigin(0.5, 0)
+      .setScale(2)
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.scene.start('MainScene', {level: this.level, mode: this.mode})
+      })
+      
+      // Our Home button
+      this.add.sprite(nextSprite.x + nextSprite.width * 3, nextSprite.y, 'home')
+      .setOrigin(0.5, 0)
+      .setScale(2)
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.scene.start('Menu')
+      })
   }
 
   secondsToTime(time){
