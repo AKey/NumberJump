@@ -9,7 +9,7 @@ export default class MainScene extends Phaser.Scene {
     this.level = data.level;
     this.time = data.time;
     this.mode = data.mode;
-    
+
     this.newHigh = false;
   }
 
@@ -22,11 +22,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   makeBackground() {
-    // Build our backgound, box, and title text
-    // Setting a background color
-    this.add.graphics()
-    .fillStyle(0x00b894, 0.9)
-    .fillRoundedRect(0, 0, this.cameras.main.width, this.cameras.main.height)
 
     // The box to hold our text items
     var box = this.add.graphics()
@@ -60,30 +55,30 @@ export default class MainScene extends Phaser.Scene {
     // Level Text
     this.levelText = this.add.bitmapText(this.cameras.main.width * 0.5, this.cameras.main.height * .25, 'chunq', 'Level - ' + (this.level + 1))
     .setFontSize(64)
-    .setOrigin(0.5,0)
     .setLetterSpacing(1)
-    .setTint(0x718093)
+    .setOrigin(0.5,0)
+    .setTint(0x4c5669)
 
     let finalTime = this.secondsToTime(this.time)
 
     // Time Text
     var timeText = this.add.bitmapText(this.levelText.x , this.levelText.y + this.levelText.height * 2, 'chunq', 'Time - ' + finalTime)
     .setFontSize(64)
-    .setOrigin(0.5,0)
     .setLetterSpacing(1)
-    .setTint(0x718093)
+    .setOrigin(0.5,0)
+    .setTint(0x6666ff)
 
     if (this.newHigh == true) {
-      timeText.setTint(0xeb2f06)
+      timeText.setTint(0x6666ff)
       .setFontSize(70)
       .setLetterSpacing(1)
 
       // Make some text to tell the player they set a new best
-      var newRecordText = this.add.bitmapText(timeText.x, timeText.y, 'chunq', 'NEW RECORD!')
-      .setOrigin(0.5, 1)
+      var newRecordText = this.add.bitmapText(timeText.x, timeText.y + timeText.height, 'chunq', 'NEW RECORD!')
       .setFontSize(50)
       .setLetterSpacing(1)
-      .setTint(0xEE5A24)
+      .setOrigin(0.5, 0)
+      .setTint(0xcccccc)
 
       // Make the new best indicator blink
       this.tweens.add({
@@ -93,6 +88,13 @@ export default class MainScene extends Phaser.Scene {
         repeat: -1,
         yoyo: true
       })
+
+      // Add a trophy sprite just because
+      this.add.image(timeText.x, timeText.y + timeText.height * 3, 'trophy')
+      .setScale(4)
+      .setOrigin(.5)
+      .setTint(0xFA9B2B)
+
     } else {  // Show the old best time
       let bestTime = this.secondsToTime(this.savedData[this.mode][this.level])
 
@@ -100,7 +102,7 @@ export default class MainScene extends Phaser.Scene {
       .setOrigin(0.5, 0)
       .setFontSize(50)
       .setLetterSpacing(1)
-      .setTint(0xB53471)
+      .setTint(0xcccccc)
       
     }
   }
