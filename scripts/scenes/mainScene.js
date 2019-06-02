@@ -341,7 +341,7 @@ export default class MainScene extends Phaser.Scene {
     }
 
     // Show the solution in the chrome console
-    // console.log(newLevel)
+    //console.log(newLevel)
     // console.log(solution)
     return newLevel;
   }

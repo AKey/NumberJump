@@ -1,6 +1,6 @@
 import { gameOptions } from "../gameConfig.js";
 
-export default class MainScene extends Phaser.Scene {
+export default class levelComplete extends Phaser.Scene {
   constructor() {
     super({ key: "levelComplete" });
   }
