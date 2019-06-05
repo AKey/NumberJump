@@ -46,10 +46,10 @@ export default class optionsMenu extends Phaser.Scene {
 
   makeButtons() {
     // Score Reset Text Button
-    var resetText = this.add.bitmapText(this.box.x + 30, this.box.y + 80, 'chunq', 'Reset Scores')
+    var resetText = this.add.bitmapText(this.box.x + 30, this.box.y + 110, 'chunq', 'Reset High Scores')
     .setTint(0x22a6b3)
-    .setFontSize(72)
-    .setLetterSpacing(1)
+    .setFontSize(65)
+    .setLetterSpacing(2.5)
     .setInteractive()
     .on('pointerdown', () => {
       this.resetScores();

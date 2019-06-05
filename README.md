@@ -38,7 +38,6 @@ Resetting of the Original/Standard levels is only done via a Score Reset option 
 Levels are scored only in completion time rounded down to the last second. Scores are saved in this second format, so a board taking 1:20 to clear has a score of 80. As a timed game Lower scores are better and this is the check performed by `checkScores()` in the `levelComplete` script. 
 
 ## TODO  
-- Instructions Screen
 - Music/Sounds ??  
 
 ## Upgrades for later [v2]

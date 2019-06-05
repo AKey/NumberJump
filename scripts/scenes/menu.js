@@ -53,8 +53,19 @@ export default class Boot extends Phaser.Scene {
      this.getScores()
 
 
+     // Instructions Button
+     this.add.bitmapText(this.cameras.main.width * 0.05, this.cameras.main.height * 0.70, 'chunq', 'How to play')
+     .setTint(0xf0932b)
+     .setFontSize(64)
+     .setLetterSpacing(1)
+     .setInteractive()
+     .on('pointerdown', () => { 
+       gameOptions.randomLevels = []
+       this.scene.start('Instructions');
+     })
+     
      // Options Button
-    this.add.bitmapText(this.cameras.main.width * 0.05, this.cameras.main.height * 0.75, 'chunq', 'Game Options')
+    this.add.bitmapText(this.cameras.main.width * 0.05, this.cameras.main.height * 0.80, 'chunq', 'Game Options')
     .setTint(0x22a6b3)
     .setFontSize(64)
     .setLetterSpacing(1)
@@ -63,7 +74,7 @@ export default class Boot extends Phaser.Scene {
       gameOptions.randomLevels = []
       this.scene.start('optionsMenu');
     })
-    
+
   }
 
   // Used to load our highscores, make a new entry, and reset old scores
