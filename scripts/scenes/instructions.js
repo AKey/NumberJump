@@ -32,7 +32,7 @@ export default class Instructions extends Phaser.Scene {
 
   makeText() {
     // The Instruction Text
-    var instructionText = this.add.bitmapText(this.box.x + 10, this.box.y + 50, 'chunq', '- Pick numbered a Block \n\n- Move the block in a \nstright line to an empty \nspace \n\n- The number on the \nblock says how far it \ncan move.')
+    var instructionText = this.add.bitmapText(this.box.x + 10, this.box.y + 50, 'chunq', '- Pick a numbered Block \n\n- Move the block in a \nstright line to an empty \nspace \n\n- The number on the \nblock says how far it \ncan move.')
     .setTint(0x333333)
     .setFontSize(48)
     .setLetterSpacing(3)
